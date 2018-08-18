@@ -1,0 +1,38 @@
+1.0 (September 28, 2012)-hp
+- initial release
+
+1.1 (October 16, 2012)-hp
+- added concurrency using GNU Parallel
+- added filtering using fuser
+
+1.1 (October 19, 2012)-hp
+- fixed an issue where run.sh is unable to run manually within /opt/bea/log.d due due to a bug with find
+  (since /opt/bea/log.d is not read/executable by the "user", find fails immediately)
+- fixed an issue where the list is not check again after it's been filtered for lockness
+
+2.0 (November 1, 2012)-hp
+- completely rewritten for much greater flexibility
+- new job can be added in the config.properties file
+
+3.0 (December 6, 2012)-hp
+- rewritten again for maximum flexibility
+- incorporated extensive checkings
+
+3.1 (December 10, 2012)-hp
+- fixed multiple bugs
+- added kB freed reports
+
+3.2 (December 15, 2012)-hp
+- fixed JOB_ENABLED issue
+
+3.3 (December 20, 2012)-hp
+- minor fixes
+
+3.4 (December 21, 2012)-hp
+- fixed issue where there could exist multiple items that are the same within the final list
+
+3.4.1 (September 12, 2013)-hp
+- replace "sudo -A" with "sudo -n"
+
+3.5 (November 04, 2014)-hp
+- work both in Solaris and AIX

@@ -1,0 +1,473 @@
+
+######################
+## GLOBAL DEFINITON ##
+######################
+
+# (int) delete if older than GLOBAL_RET_DELETE days
+GLOBAL_RET_DELETE=90
+
+# (int) compress if older than GLOBAL_RET_COMPRESS days
+GLOBAL_RET_COMPRESS=15
+
+# (int) if value is greater than 0 then verbose logging is enabled
+GLOBAL_VERBOSE_LOGGING=0
+
+# (boolean) if DRY_RUN is true, do not delete or compress, list only
+GLOBAL_DRY_RUN=true
+
+# (int) number of child processes to spawn during compression (for parallel's -j parameter)
+GLOBAL_CHILD_PROCESS=6
+
+# (file) location of the GNU parallel utility
+GLOBAL_PARALLEL_BIN="$CUR_DIR"/parallel.pl
+
+# (int) niceness of the process / must be a number (0 for normal and 19 for lowest priority)
+GLOBAL_NICENESS=19
+
+# (boolean) enable with great care (does not follow symbolic link)
+GLOBAL_RECURSIVE=false
+
+# (file) location of the sudo binary
+GLOBAL_SUDO_BIN="/opt/sfw/bin/sudo"
+
+# (boolean) enable/disable the use of sudo
+GLOBAL_USE_SUDO=true
+
+# (boolean) determine if the jobs to be enabled by default
+GLOBAL_ENABLED=true
+
+# location of the executable file
+RUN="$0"
+
+# remember to append at least a space or a tab for every entry within JOB_FILE_PATTERN
+
+###############
+## FIRST RUN ##
+###############
+. $RUN --first-time
+
+####################
+## job definition ##
+####################
+JOB_USER=tsoadm
+JOB_USE_SUDO=false
+JOB_DRY_RUN=false
+JOB_RET_DELETE=365
+JOB_RET_COMPRESS=180
+JOB_DIR_QUEUE="
+	/opt/tso/log/eraser
+"
+JOB_FILE_PATTERN='
+	\/eraser_cronjob_\d{4}_\d{2}_\d{2}-\d{2}:\d{2}:\d{2}(\.gz)?$
+'
+. $RUN --execute-job
+
+####################
+## job definition ##
+####################
+JOB_USER=adaptor
+JOB_DRY_RUN=false
+JOB_DIR_QUEUE="
+	/opt/bea/logs/$JOB_USER
+"
+JOB_FILE_PATTERN='
+	\/stdout-[a-z]+(Admin|As0\d)\.log\.\d{4}-\d{2}-\d{2}(-\d\d:\d\d:\d\d)?(\.gz)?$
+	\/[a-z]+(Domain|Admin|As0\d)(-access)?\.\d{8}-\d{4}\.log(\.gz)?$
+	\/trace\.log\.\d{4}-\d{2}-\d{2}(\.gz)?$
+	\/message\.log\.\d{4}-\d{2}-\d{2}(\.gz)?$
+	\/transaction\.log\.\d{4}-\d{2}-\d{2}(\.gz)?$
+'
+. $RUN --execute-job
+
+####################
+## job definition ##
+####################
+JOB_USER=audit
+JOB_DRY_RUN=false
+JOB_DIR_QUEUE="
+	/opt/bea/logs/$JOB_USER
+"
+JOB_FILE_PATTERN='
+	\/stdout-[a-z]+(Admin|As0\d)\.log\.\d{4}-\d{2}-\d{2}(-\d\d:\d\d:\d\d)?(\.gz)?$
+	\/[a-z]+(Domain|Admin|As0\d)(-access)?\.\d{8}-\d{4}\.log(\.gz)?$
+	\/trace\.log\.\d{4}-\d{2}-\d{2}(\.gz)?$
+	\/DefaultAuditRecorder\.\d{12}\.log(\.gz)?$
+'
+. $RUN --execute-job
+
+####################
+## job definition ##
+####################
+JOB_USER=cns
+JOB_DRY_RUN=false
+JOB_DIR_QUEUE="
+	/opt/bea/logs/$JOB_USER
+"
+JOB_FILE_PATTERN='
+	\/stdout-[a-z]+(Admin|As0\d)\.log\.\d{4}-\d{2}-\d{2}(-\d\d:\d\d:\d\d)?(\.gz)?$
+	\/[a-z]+(Domain|Admin|As0\d)(-access)?\.\d{8}-\d{4}\.log(\.gz)?$
+'
+. $RUN --execute-job
+
+####################
+## job definition ##
+####################
+JOB_USER=colnet
+JOB_DRY_RUN=false
+JOB_DIR_QUEUE="
+	/opt/bea/logs/$JOB_USER
+"
+JOB_FILE_PATTERN='
+	\/stdout-[a-z]+(Admin|As0\d)\.log\.\d{4}-\d{2}-\d{2}(-\d\d:\d\d:\d\d)?(\.gz)?$
+	\/[a-z]+(Domain|Admin|As0\d)(-access)?\.\d{8}-\d{4}\.log(\.gz)?$
+	\/eCollision(Analyzer)?\.log\.\d{4}-\d{2}-\d{2}(\.gz)?$
+	\/colnet\.log\.\d{4}-\d{2}-\d{2}(\.gz)?$
+	\/eCollision.log.\d+(\.gz)?$
+'
+. $RUN --execute-job
+
+####################
+## job definition ##
+####################
+JOB_USER=des
+JOB_DRY_RUN=false
+JOB_DIR_QUEUE="
+	/opt/bea/logs/$JOB_USER
+"
+JOB_FILE_PATTERN='
+	\/stdout-[a-z]+(Admin|As0\d)\.log\.\d{4}-\d{2}-\d{2}(-\d\d:\d\d:\d\d)?(\.gz)?$
+	\/[a-z]+(Domain|Admin|As0\d)(-access)?\.\d{8}-\d{4}\.log(\.gz)?$
+	\/trace\.log\.\d{4}-\d{2}-\d{2}(\.gz)?$
+'
+. $RUN --execute-job
+
+####################
+## job definition ##
+####################
+JOB_USER=dss
+JOB_DRY_RUN=false
+JOB_DIR_QUEUE="
+	/opt/bea/logs/$JOB_USER
+"
+JOB_FILE_PATTERN='
+	\/stdout-[a-z]+(Admin|As0\d)\.log\.\d{4}-\d{2}-\d{2}(-\d\d:\d\d:\d\d)?(\.gz)?$
+	\/[a-z]+(Domain|Admin|As0\d)(-access)?\.\d{8}-\d{4}\.log(\.gz)?$
+	\/dss\.log\.\d{4}-\d{2}-\d{2}(\.gz)?$
+'
+. $RUN --execute-job
+
+####################
+## job definition ##
+####################
+JOB_USER=edt
+JOB_DRY_RUN=false
+JOB_DIR_QUEUE="
+	/opt/bea/logs/$JOB_USER
+"
+JOB_FILE_PATTERN='
+	\/stdout-[a-z]+(Admin|As0\d)\.log\.\d{4}-\d{2}-\d{2}(-\d\d:\d\d:\d\d)?(\.gz)?$
+	\/[a-z]+(Domain|Admin|As0\d)(-access)?\.\d{8}-\d{4}\.log(\.gz)?$
+	\/aris_trace\.log\.\d{4}-\d{2}-\d{2}(\.gz)?$
+'
+. $RUN --execute-job
+
+####################
+## job definition ##
+####################
+JOB_USER=eps
+JOB_DRY_RUN=false
+JOB_DIR_QUEUE="
+	/opt/bea/logs/$JOB_USER
+"
+JOB_FILE_PATTERN='
+	\/stdout-[a-z]+(Admin|As0\d)\.log\.\d{4}-\d{2}-\d{2}(-\d\d:\d\d:\d\d)?(\.gz)?$
+	\/[a-z]+(Domain|Admin|As0\d)(-access)?\.\d{8}-\d{4}\.log(\.gz)?$
+	\/trace\.log\.\d{4}-\d{2}-\d{2}(\.gz)?$
+	\/reconciliation_cron_jobs\d{6}\.log(\.gz)?$
+'
+. $RUN --execute-job
+
+####################
+## job definition ##
+####################
+JOB_USER=esdi
+JOB_DRY_RUN=false
+JOB_DIR_QUEUE="
+	/opt/bea/logs/$JOB_USER
+"
+JOB_FILE_PATTERN='
+	\/stdout-[a-z]+(Admin|As0\d)\.log\.\d{4}-\d{2}-\d{2}(-\d\d:\d\d:\d\d)?(\.gz)?$
+	\/[a-z]+(Domain|Admin|As0\d)(-access)?\.\d{8}-\d{4}\.log(\.gz)?$
+	\/trace\.log\.\d{4}-\d{2}-\d{2}(\.gz)?$
+	\/transaction\.log.\d{4}-\d{2}-\d{2}(\.gz)?$
+	\/testfw_trace.log.\d{4}-\d{2}-\d{2}(\.gz)?$
+'
+. $RUN --execute-job
+
+####################
+## job definition ##
+####################
+JOB_USER=esdiL
+JOB_DRY_RUN=false
+JOB_DIR_QUEUE="
+	/opt/bea/logs/$JOB_USER
+"
+JOB_FILE_PATTERN='
+	\/stdout-[a-zA-Z]+(Admin|As0\d)\.log\.\d{4}-\d{2}-\d{2}(-\d\d:\d\d:\d\d)?(\.gz)?$
+	\/[a-z]+(Domain|Admin|As0\d)(-access)?\.\d{8}-\d{4}\.log(\.gz)?$
+	\/trace\.log\.\d{4}-\d{2}-\d{2}(\.gz)?$
+	\/[a-zA-Z]+\.log\d{5}(\.gz)?$
+'
+. $RUN --execute-job
+
+####################
+## job definition ##
+####################
+JOB_USER=ics
+JOB_DRY_RUN=false
+JOB_DIR_QUEUE="
+	/opt/bea/logs/$JOB_USER
+"
+JOB_FILE_PATTERN='
+	\/stdout-[a-z]+(Admin|As0\d)\.log\.\d{4}-\d{2}-\d{2}(-\d\d:\d\d:\d\d)?(\.gz)?$
+	\/[a-z]+(Domain|Admin|As0\d)(-access)?\.\d{8}-\d{4}\.log(\.gz)?$
+	\/ibcis\.log\.\d{4}-\d{2}-\d{2}(\.gz)?$
+	\/imsra\.log\.\d+(\.gz)?$
+'
+. $RUN --execute-job
+
+####################
+## job definition ##
+####################
+JOB_USER=ij
+JOB_DRY_RUN=false
+JOB_DIR_QUEUE="
+	/opt/bea/logs/$JOB_USER
+"
+JOB_FILE_PATTERN='
+	\/stdout-[a-z]+(Admin|As0\d)\.log\.\d{4}-\d{2}-\d{2}(-\d\d:\d\d:\d\d)?(\.gz)?$
+	\/[a-z]+(Domain|Admin|As0\d)(-access)?\.\d{8}-\d{4}\.log(\.gz)?$
+'
+. $RUN --execute-job
+
+####################
+## job definition ##
+####################
+JOB_USER=irp
+JOB_DRY_RUN=false
+JOB_DIR_QUEUE="
+	/opt/bea/logs/$JOB_USER
+"
+JOB_FILE_PATTERN='
+	\/stdout-[a-z]+(Admin|As0\d)\.log\.\d{4}-\d{2}-\d{2}(-\d\d:\d\d:\d\d)?(\.gz)?$
+	\/[a-z]+(Domain|Admin|As0\d)(-access)?\.\d{8}-\d{4}\.log(\.gz)?$
+	\/mm\.log\.\d{2}-\d{2}-\d{2}_\d{2}:\d{2}:\d{2}(\.gz)?$
+'
+. $RUN --execute-job
+
+####################
+## job definition ##
+####################
+JOB_USER=iss
+JOB_DRY_RUN=false
+JOB_DIR_QUEUE="
+	/opt/bea/logs/$JOB_USER
+"
+JOB_FILE_PATTERN='
+	\/stdout-[a-z]+(Admin|As0\d)\.log\.\d{4}-\d{2}-\d{2}(-\d\d:\d\d:\d\d)?(\.gz)?$
+	\/[a-z]+(Domain|Admin|As0\d)(-access)?\.\d{8}-\d{4}\.log(\.gz)?$
+	\/iss\.log\.\d{4}-\d{2}-\d{2}(\.gz)?$
+	\/domain_iss\.\d{8}-\d{4}\.log(\.gz)?$
+'
+. $RUN --execute-job
+
+####################
+## job definition ##
+####################
+JOB_USER=jtips
+JOB_DRY_RUN=false
+JOB_DIR_QUEUE="
+	/opt/bea/logs/$JOB_USER
+"
+JOB_FILE_PATTERN='
+	\/stdout-[a-z]+(Admin|As0\d)\.log\.\d{4}-\d{2}-\d{2}(-\d\d:\d\d:\d\d)?(\.gz)?$
+	\/[a-z]+(Domain|Admin|As0\d)(-access)?\.\d{8}-\d{4}\.log(\.gz)?$
+	\/trace\.log\.\d{4}-\d{2}-\d{2}(\.gz)?$
+'
+. $RUN --execute-job
+
+####################
+## job definition ##
+####################
+JOB_USER=mqa
+JOB_DRY_RUN=false
+JOB_DIR_QUEUE="
+	/opt/bea/logs/$JOB_USER
+"
+JOB_FILE_PATTERN='
+	\/stdout-[a-z]+(Admin|As0\d)\.log\.\d{4}-\d{2}-\d{2}(-\d\d:\d\d:\d\d)?(\.gz)?$
+	\/[a-z]+(Domain|Admin|As0\d)(-access)?\.\d{8}-\d{4}\.log(\.gz)?$
+	\/domain_[a-z]+\.\d{8}-\d{4}\.log(\.gz)?$
+	\/trace\.log\.\d{4}-\d{2}-\d{2}(\.gz)?$
+'
+. $RUN --execute-job
+
+####################
+## job definition ##
+####################
+JOB_USER=mu
+JOB_DRY_RUN=false
+JOB_DIR_QUEUE="
+	/opt/bea/logs/$JOB_USER
+"
+JOB_FILE_PATTERN='
+	\/stdout-[a-z]+(Admin|As0\d)\.log\.\d{4}-\d{2}-\d{2}(-\d\d:\d\d:\d\d)?(\.gz)?$
+	\/[a-z]+(Domain|Admin|As0\d)(-access)?\.\d{8}-\d{4}\.log(\.gz)?$
+	\/mu\.log\.\d{4}-\d{2}-\d{2}(\.gz)?$
+'
+. $RUN --execute-job
+
+####################
+## job definition ##
+####################
+JOB_USER=oms
+JOB_DRY_RUN=false
+JOB_DIR_QUEUE="
+	/opt/bea/logs/$JOB_USER
+"
+JOB_FILE_PATTERN='
+	\/stdout-[a-z]+(Admin|As0\d)\.log\.\d{4}-\d{2}-\d{2}(-\d\d:\d\d:\d\d)?(\.gz)?$
+	\/[a-z]+(Domain|Admin|As0\d)(-access)?\.\d{8}-\d{4}\.log(\.gz)?$
+	\/trace\.log\.\d{4}-\d{2}-\d{2}(\.gz)?$
+'
+. $RUN --execute-job
+
+####################
+## job definition ##
+####################
+JOB_USER=oop
+JOB_DRY_RUN=false
+JOB_DIR_QUEUE="
+	/opt/bea/logs/$JOB_USER
+"
+JOB_FILE_PATTERN='
+	\/stdout-[a-z]+(Admin|As0\d)\.log\.\d{4}-\d{2}-\d{2}(-\d\d:\d\d:\d\d)?(\.gz)?$
+	\/[a-z]+(Domain|Admin|As0\d)(-access)?\.\d{8}-\d{4}\.log(\.gz)?$
+	\/trace\.log\.\d{4}-\d{2}-\d{2}(-\d{2}-\d{2})?(\.gz)?$
+'
+. $RUN --execute-job
+
+####################
+## job definition ##
+####################
+JOB_USER=uas
+JOB_DRY_RUN=false
+JOB_DIR_QUEUE="
+	/opt/bea/logs/$JOB_USER
+"
+JOB_FILE_PATTERN='
+	\/stdout-[a-z]+(Admin|As0\d)\.log\.\d{4}-\d{2}-\d{2}(-\d\d:\d\d:\d\d)?(\.gz)?$
+	\/[a-z]+(Domain|Admin|As0\d)(-access)?\.\d{8}-\d{4}\.log(\.gz)?$
+	\/trace\.log\.\d{4}-\d{2}-\d{2}(\.gz)?$
+	\/DefaultAuditRecorder\.\d{12}\.log(\.gz)?$
+'
+. $RUN --execute-job
+
+####################
+## job definition ##
+####################
+JOB_USER=vss
+JOB_DRY_RUN=false
+JOB_DIR_QUEUE="
+	/opt/bea/logs/$JOB_USER
+"
+JOB_FILE_PATTERN='
+	\/stdout-[a-z]+(Admin|As0\d)\.log\.\d{4}-\d{2}-\d{2}(-\d\d:\d\d:\d\d)?(\.gz)?$
+	\/[a-z]+(Domain|Admin|As0\d)(-access)?\.\d{8}-\d{4}\.log(\.gz)?$
+	\/trace\.log\.\d{4}-\d{2}-\d{2}(\.gz)?$
+
+'
+. $RUN --execute-job
+
+####################
+## job definition ##
+####################
+JOB_USER=lcss
+JOB_DRY_RUN=false
+JOB_DIR_QUEUE="
+	/opt/bea/logs/lcss12
+"
+JOB_FILE_PATTERN='
+	\/stdout-[a-z]+(Admin|As0\d)\.log\.\d{4}-\d{2}-\d{2}(-\d\d:\d\d:\d\d)?(\.gz)?$
+	\/[a-z]+(Domain|Admin|As0\d)(-access)?\.\d{8}-\d{4}\.log(\.gz)?$
+	\/trace\.log\.\d{4}-\d{2}-\d{2}(\.gz)?$
+
+'
+. $RUN --execute-job
+
+####################
+## job definition ##
+####################
+JOB_USER=eps12
+JOB_DRY_RUN=false
+JOB_DIR_QUEUE="
+	/opt/bea/logs/$JOB_USER
+"
+JOB_FILE_PATTERN='
+	\/stdout-[a-z]+(Admin|As0\d)\.log\.\d{4}-\d{2}-\d{2}(-\d\d:\d\d:\d\d)?(\.gz)?$
+	\/[a-z]+(Domain|Admin|As0\d)(-access)?\.\d{8}-\d{4}\.log(\.gz)?$
+	\/trace\.log\.\d{4}-\d{2}-\d{2}(\.gz)?$
+
+'
+. $RUN --execute-job
+
+####################
+## job definition ##
+####################
+JOB_USER=tsoadm
+JOB_USE_SUDO=false
+JOB_DRY_RUN=false
+JOB_RET_DELETE=30
+JOB_RET_COMPRESS=5
+JOB_DIR_QUEUE="
+	/opt/tso/apache-tomcat-6.0.35/logs
+"
+JOB_FILE_PATTERN='
+	catalina\.\d{4}-\d{2}-\d{2}\.log$
+	host-manager\.\d{4}-\d{2}-\d{2}\.log$
+	localhost\.\d{4}-\d{2}-\d{2}\.log$
+	manager\.\d{4}-\d{2}-\d{2}\.log$
+	fsa\.log\.\d{4}-\d{2}-\d{2}$
+	fsaAgent\.log\.\d{4}-\d{2}-\d{2}$
+	ris\.log\.\d{4}-\d{2}-\d{2}$
+	risAgent\.log\.\d{4}-\d{2}-\d{2}$
+	aa\.log\.\d{4}-\d{2}-\d{2}$
+	aaAgent\.log\.\d{4}-\d{2}-\d{2}(\.gz)?$
+	aa.monitor\.log\.\d{4}-\d{2}-\d{2}(\.gz)?$
+	aaAgent.monitor\.log\.\d{4}-\d{2}-\d{2}$
+'
+. $RUN --execute-job
+
+
+####################
+## job definition ##
+####################
+JOB_USER=edt
+JOB_RET_DELETE=3650
+JOB_RET_COMPRESS=30
+JOB_DRY_RUN=false
+JOB_RECURSIVE=true
+JOB_DIR_QUEUE="
+	/opt/bea/domains/edt/ARIS_BATCH/ARCHIVE	
+"
+
+JOB_FILE_PATTERN='
+	\/.+\.IN(\.gz)?$
+'
+
+. $RUN --execute-job
+
+##############
+## LAST RUN ##
+##############
+. $RUN --last-time
